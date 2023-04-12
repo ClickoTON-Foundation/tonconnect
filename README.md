@@ -24,7 +24,7 @@ pip install -e tonconnect
 
 Example of connecting wallet.
 
-```
+```python
 from tonconnect.connector import Connector
 
 
