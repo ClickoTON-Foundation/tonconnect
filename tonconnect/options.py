@@ -16,7 +16,3 @@ class ProofRequestOption(BaseRequestOption):
     
     def to_dict(self):
         return {'name': self.name, 'payload': self.payload}
-
-class TransactionRequest():
-    def __init__(self):
-        pass

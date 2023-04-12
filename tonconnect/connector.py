@@ -4,6 +4,7 @@ from .options import AddressRequestOption, ProofRequestOption
 from .wallet import Wallet
 from .bridge import Bridge
 from .apps import APPS
+from .exceptions import ConnectorException
 
 
 class Connector():
@@ -18,7 +19,7 @@ class Connector():
         metadata = Metadata(self.metadata_url, [AddressRequestOption(), ProofRequestOption(payload)])
         
         if wallet not in APPS:
-            return None
+            raise ConnectorException(f'Unknown wallet {wallet}.')
         
         self.wallet = APPS[wallet]()
         self.bridge = self.wallet.bridge
@@ -30,10 +31,10 @@ class Connector():
         event = self.bridge.get_event()
         
         if event.address is None or event.proof is None:
-            return None
+            raise ConnectorException('Getting address without ton proof and ton address.')
         
         if not event.proof.check(event.address.raw_address, event.address.get_verify_key()):
-            return None
+            raise ConnectorException('Invalid proof.')
         
         return event.address.address
         
