@@ -1,0 +1,16 @@
+[project]
+name = "tonconnect"
+description = "TON Connect - Python library for using TON Connect 2."
+version = "0.0.1"
+authors = [
+    {name = "Vlad100"}
+]
+dependencies = [
+    "pynacl",
+    "requests",
+    "tonsdk"
+]
+
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core >=3.2,<4"]
