@@ -1,24 +1,27 @@
 import http.client
-import requests
+import time
 import base64
 import json
+import requests
 from .crypto import SessionCrypto
 from .utils import public_key_from_hex, public_key_to_hex
 from .events import ConnectEvent
 from .requests import Request
+from .exceptions import BridgeException
 
 
 class Bridge():
-    def __init__(self, url: str, slash_url: str = None):
+    def __init__(self, url: str, slash_url: str = None, ttl: int = 300, timeout: int = 600):
         self.url = url
         self.slash_url = slash_url if slash_url is not None else ''
         self.session = None
         self.last_id = None
-        self.ttl = 300
+        self.ttl = ttl
+        self.timeout = timeout
     
     def next_id(self):
         if self.last_id is None:
-            return None
+            raise BridgeException('Getting next id of non-connected bridge.')
         else:
             self.last_id += 1
             return self.last_id
@@ -30,7 +33,7 @@ class Bridge():
     
     def get_event(self):
         if self.session is None:
-            return None
+            raise BridgeException('Getting event on non-connected bridge.')
 
         url = f'{self.slash_url}/events?client_id={self.session.to_hex()}'
         if self.last_id is not None:
@@ -42,12 +45,17 @@ class Bridge():
             'Connection': 'Keep-Alive',
         })
         
+        start = time.time()
         with connection.getresponse() as response:
             run = True
             while run:
                 for line in response:
+                    if time.time() - start >= self.timeout:
+                        raise BridgeException('Timeout while waiting for event.')
+                    
                     line = line.decode('UTF-8')
                     if line == '\r\n':
+                        run = False
                         break
                     if ':' in line and not line.startswith(':'):
                         key, value = line.split(':', 1)
@@ -77,7 +85,7 @@ class Bridge():
 
     def send_request(self, message: Request):
         if self.session is None:
-            return None
+            raise BridgeException('Sending request on non-connected bridge.')
         
         message = message.to_dict()
         # print(message)
