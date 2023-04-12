@@ -50,6 +50,12 @@ print(f'Successfuly connected {address}.')
 
 This project is licensed under the Apache License 2.0 - see the LICENSE.md file for details
 
+## Donate
+
+If you liked the library, I will be glad to donate.
+
+* TON: EQCgphx8rTI0PukwmgpVqiPgqguTujhQscg2h7jgc4U0t347
+
 ## Acknowledgments
 
 * [ton-connect-docs](https://github.com/ton-blockchain/ton-connect)
