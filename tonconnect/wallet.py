@@ -1,7 +1,6 @@
-from bridge import Bridge
-from url import get_url
-from crypto import SessionCrypto
-from static import Metadata
+from .bridge import Bridge
+from .url import get_url
+from .static import Metadata
 
 
 class Wallet():

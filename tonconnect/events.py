@@ -13,7 +13,7 @@ class Address:
     state_init: bytes
     
     def from_dict(data: dict):
-        return Address(data['address'], tonsdk.utils.Address(data['address']).to_string(True), base64.b64decode(data['walletStateInit']))
+        return Address(data['address'], tonsdk.utils.Address(data['address']).to_string(True, True, True, False), base64.b64decode(data['walletStateInit']))
 
     def get_key(self):
         state = self.state_init

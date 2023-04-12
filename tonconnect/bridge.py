@@ -58,8 +58,8 @@ class Bridge():
                             break
                         elif key == 'id':
                             id = value
-                        else:
-                            print(key, value)
+                        # else:
+                        #     print(key, value)
         
         encoded = base64.b64decode(data['message'])
         nonce = encoded[:24]
@@ -80,14 +80,14 @@ class Bridge():
             return None
         
         message = message.to_dict()
-        print(message)
+        # print(message)
         encrypted_message = self.session.encrypt(json.dumps(message))
-        print(encrypted_message)
+        # print(encrypted_message)
         concatenated_message = b''.join([bytes(i) for i in encrypted_message])
         body = base64.b64encode(concatenated_message).decode()
-        print(body)
+        # print(body)
         
         answer = requests.post(f'https://{self.url}{self.slash_url}/message?client_id={self.session.to_hex()}&to={public_key_to_hex(self.session.app_public_key)}&ttl={self.ttl}&topic={message["method"]}', data=body)
-        print(answer.text, 'sended')
+        # print(answer.text, 'sended')
         
         return self.get_event()
