@@ -11,6 +11,11 @@ dependencies = [
     "tonsdk"
 ]
 
+[project.urls]
+Homepage = "https://github.com/ClickoTON-Foundation/tonconnect"
+Documentation = "https://github.com/ClickoTON-Foundation/tonconnect"
+Repository = "https://github.com/ClickoTON-Foundation/tonconnect/"
+
 [build-system]
 build-backend = "flit_core.buildapi"
 requires = ["flit_core >=3.2,<4"]
