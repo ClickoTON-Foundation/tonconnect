@@ -45,6 +45,10 @@ print(f'Successfuly connected {address}.')
 
 * 0.0.1
     * Initial Beta
+* 0.0.2
+    * pyproject.toml fix
+* 0.0.3
+    * pyproject.toml fix
 
 ## License
 
