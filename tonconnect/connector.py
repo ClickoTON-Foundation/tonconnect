@@ -37,4 +37,3 @@ class Connector():
             raise ConnectorException('Invalid proof.')
         
         return event.address.address
-        
