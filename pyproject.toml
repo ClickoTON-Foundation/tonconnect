@@ -2,14 +2,15 @@
 name = "tonconnect"
 description = "TON Connect - Python library for using TON Connect 2."
 readme = "README.md"
-version = "0.0.3"
+version = "0.1.0"
 authors = [
     {name = "Vlad100"}
 ]
 dependencies = [
     "pynacl",
     "requests",
-    "tonsdk"
+    "tonsdk",
+    "aiohttp"
 ]
 
 [project.urls]
