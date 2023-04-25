@@ -12,6 +12,8 @@ At this moment you can connect wallets to apps using HTTP Bridge.
 
 * PyNaCl
 * tonsdk (will be removed in the future)
+* aiohttp
+* requests
 
 ### Installing
 
