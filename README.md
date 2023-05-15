@@ -39,6 +39,23 @@ address = connector.get_address()
 print(f'Successfuly connected {address}.')
 ```
 
+Example of connecting wallet with help of tonapi.io.
+tonapi.io it's used to obtain a public key, which adds support for all versions of the wallet that have the get_public_key method. (These are all versions except v3r1).
+But if the wallet isn't already deployed, user will not be able to log in.
+
+```python
+from tonconnect.connector import Connector
+
+
+connector = Connector('https://tonclick.online/ton-connect.json', use_tonapi=True, tonapi_token=None)
+url = connector.connect('tonkeeper', 'test')
+
+print(f'Universal connect url for Tonkeeper: {url}')
+
+address = connector.get_address()
+print(f'Successfuly connected {address}.')
+```
+
 Example of asynchronous connecting wallet.
 
 ```python
@@ -67,6 +84,8 @@ if __name__ == '__main__':
 
 ## Version History
 
+* 0.1.1
+    * Added tonapi.io support
 * 0.1.0
     * Async wrapper
 * 0.0.2 & 0.0.3
