@@ -21,13 +21,16 @@ class Connector():
         self.use_tonapi: bool = use_tonapi
         self.tonapi_token: str = tonapi_token
     
-    def connect(self, wallet: str, payload: str):
+    def connect(self, wallet: Wallet, payload: str):
         metadata = Metadata(self.metadata_url, [AddressRequestOption(), ProofRequestOption(payload)])
         
-        if wallet not in APPS:
-            raise ConnectorException(f'Unknown wallet {wallet}.')
-        
-        self.wallet = APPS[wallet]()
+        if isinstance(wallet, str):
+            if wallet not in APPS:
+                raise ConnectorException(f'Unknown wallet {wallet}.')
+            
+            wallet = APPS[wallet]()
+            
+        self.wallet = wallet
         self.bridge = self.wallet.bridge
         
         self.bridge.connect(self.session)
@@ -41,7 +44,7 @@ class Connector():
     def get_verify_key(self, address: str) -> str:
         result = requests.get(f'https://tonapi.io/v2/blockchain/accounts/{address}/methods/get_public_key', headers={'Authorization': self.tonapi_token})
         json = result.json()
-        verify_key = VerifyKey(key=int(json['decoded']['public_key']).to_bytes(32, byteorder='big'))
+        verify_key = VerifyKey(key=int(json['stack'][-1]['num'][2:], base=16).to_bytes(32, byteorder='big'))
         
         return verify_key
     
@@ -81,7 +84,7 @@ class AsyncConnector(Connector):
         async with aiohttp.ClientSession() as client:
             result = await client.get(f'https://tonapi.io/v2/blockchain/accounts/{address}/methods/get_public_key', headers={'Authorization': self.tonapi_token})
             json = await result.json()
-            verify_key = VerifyKey(key=int(json['decoded']['public_key']).to_bytes(32, byteorder='big'))
+            verify_key = VerifyKey(key=int(json['stack'][-1]['num'][2:], base=16).to_bytes(32, byteorder='big'))
         
         return verify_key
 
