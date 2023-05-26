@@ -84,6 +84,8 @@ if __name__ == '__main__':
 
 ## Version History
 
+* 0.1.2
+    * Bug fix
 * 0.1.1
     * Added tonapi.io support
 * 0.1.0
