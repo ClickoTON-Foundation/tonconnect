@@ -6,19 +6,18 @@ class SessionCrypto():
         if private_key is None:
             private_key = PrivateKey.generate()
         
-        self.nonce_len: int = 24
         self.private_key = private_key
-        self.app_public_key: PublicKey = None
+        self.app_public_key: PublicKey = app_public_key
         self.session_id: str = private_key.public_key.encode()
         
     def create_nonce(self) -> bytes:
-        return nacl.utils.random(self.nonce_len)
+        return nacl.utils.random(Box.NONCE_SIZE)
     
     def to_hex(self) -> str:
         return bytes(self.private_key.public_key).hex()
     
     def encrypt(self, message: str) -> tuple[bytes, nacl.utils.EncryptedMessage]:
-        encoded_message = message.encode()
+        encoded_message = message.encode('utf-8')
         nonce = self.create_nonce()
         
         box = Box(self.private_key, self.app_public_key)

@@ -74,7 +74,8 @@ async def main():
 
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     loop.run_until_complete(main())
 ```
 
@@ -84,6 +85,10 @@ if __name__ == '__main__':
 
 ## Version History
 
+* 0.1.3
+    * License change
+    * Python 3.11 support
+    * Small changes
 * 0.1.2
     * Bug fix
 * 0.1.1
@@ -97,7 +102,7 @@ if __name__ == '__main__':
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the LICENSE.md file for details
+This project is licensed under the MIT License - see the LICENSE.md file for details
 
 ## Donate
 

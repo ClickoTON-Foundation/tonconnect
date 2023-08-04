@@ -63,13 +63,16 @@ class Connector():
         return event.address.address
 
 class AsyncConnector(Connector):
-    async def connect(self, wallet: str, payload: str):
+    async def connect(self, wallet: Wallet, payload: str):
         metadata = Metadata(self.metadata_url, [AddressRequestOption(), ProofRequestOption(payload)])
         
-        if wallet not in APPS:
-            raise ConnectorException(f'Unknown wallet {wallet}.')
+        if isinstance(wallet, str):
+            if wallet not in APPS:
+                raise ConnectorException(f'Unknown wallet {wallet}.')
+            
+            wallet = APPS[wallet]
         
-        self.wallet = APPS[wallet](bridge_client=AsyncBridge)
+        self.wallet = wallet(bridge_client=AsyncBridge)
         self.bridge: AsyncBridge = self.wallet.bridge
         
         self.bridge.connect(self.session)

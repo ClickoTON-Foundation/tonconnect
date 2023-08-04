@@ -43,7 +43,7 @@ class SyncClient():
         return data, id
     
     def send(self, body):
-        return requests.post(self.base_url + self.url, data=body)
+        return requests.post('https://' + self.base_url + self.url, json=body)
 
 class AsyncClient():
     def __init__(self, base_url, url):

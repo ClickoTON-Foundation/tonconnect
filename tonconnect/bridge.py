@@ -59,14 +59,11 @@ class BaseBridge():
             raise BridgeException('Sending request on non-connected bridge.')
         
         message = message.to_dict()
-        # print(json.dumps(message))
         encrypted_message = self.session.encrypt(json.dumps(message))
-        # print(encrypted_message)
         concatenated_message = b''.join([bytes(i) for i in encrypted_message])
         body = base64.b64encode(concatenated_message).decode()
-        # print(body)
         
-        url = f'https://{self.url}{self.slash_url}/message?client_id={self.session.to_hex()}&to={public_key_to_hex(self.session.app_public_key)}&ttl={self.ttl}&topic={message["method"]}'
+        url = f'{self.slash_url}/message?client_id={self.session.to_hex()}&to={public_key_to_hex(self.session.app_public_key)}&ttl={self.ttl}&topic={message["method"]}'
         
         return url, body
 
@@ -75,6 +72,7 @@ class BaseBridge():
 
     def send_request(self, message: Request) -> dict:
         return {}
+
 
 class Bridge(BaseBridge):
     def get_event(self):
@@ -90,11 +88,14 @@ class Bridge(BaseBridge):
         
         url, body = self.form_request(message)
         
+        # print(self.url, url)
         client = SyncClient(self.url, url)
         answer = client.send(body)
+        # print(body)
         # print(answer.text, 'sended')
         
         return self.get_event()
+
 
 class AsyncBridge(BaseBridge):
     async def get_event(self):
