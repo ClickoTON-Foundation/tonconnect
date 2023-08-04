@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
 ## Authors
 
-[@Vlad10081](https://t.me/dalvgames)
+[@VladPavly](https://t.me/dalvgames)
 
 ## Version History
 
