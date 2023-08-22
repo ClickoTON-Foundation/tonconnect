@@ -40,8 +40,7 @@ print(f'Successfuly connected {address}.')
 ```
 
 Example of connecting wallet with help of tonapi.io.
-tonapi.io it's used to obtain a public key, which adds support for all versions of the wallet that have the get_public_key method. (These are all versions except v3r1).
-But if the wallet isn't already deployed, user will not be able to log in.
+tonapi.io it's used to obtain a public key, which adds support for more versions of the wallet that have the get_public_key method..
 
 ```python
 from tonconnect.connector import Connector
@@ -79,12 +78,18 @@ if __name__ == '__main__':
     loop.run_until_complete(main())
 ```
 
+More examples can be found in examples folder.
+
 ## Authors
 
-[@VladPavly](https://t.me/dalvgames)
+[@VladPavly](https://t.me/dalvpv)
 
 ## Version History
 
+* 0.2.0
+    * Added support of custom timeout
+    * Added tonhub support
+    * Changed from using get_public_key method to /v2/tonconnect/stateinit (tonapi.io)
 * 0.1.3
     * License change
     * Python 3.11 support

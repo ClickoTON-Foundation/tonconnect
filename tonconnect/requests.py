@@ -15,6 +15,7 @@ class Request():
         result = {'method': self.method, 'params': params, 'id': self.id}
         return result
 
+
 class SendMessage():
     def __init__(self, address: str, amount: int, payload: str = None, state_init: str = None):
         self.address = address
@@ -31,6 +32,7 @@ class SendMessage():
             result['stateInit'] = self.state_init
         
         return result
+
 
 class SendRequest(Request):
     def __init__(self, id: int, messages: list[SendMessage], valid_until: int = None, network: int = None, from_address: str = None):

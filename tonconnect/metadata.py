@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from .options import BaseRequestOption
 
+
 @dataclass
 class Metadata:
     manifest_url: str

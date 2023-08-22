@@ -5,9 +5,11 @@ class BaseRequestOption():
     def to_dict(self):
         return {'name': self.name}
 
+
 class AddressRequestOption(BaseRequestOption):
     def __init__(self):
         self.name = 'ton_addr'
+
 
 class ProofRequestOption(BaseRequestOption):
     def __init__(self, payload):

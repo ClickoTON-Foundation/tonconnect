@@ -1,6 +1,7 @@
 import nacl.utils
 from nacl.public import PublicKey, PrivateKey, Box
 
+
 class SessionCrypto():
     def __init__(self, private_key: PrivateKey = None, app_public_key: PublicKey = None):
         if private_key is None:

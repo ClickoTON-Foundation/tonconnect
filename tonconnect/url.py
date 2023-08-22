@@ -1,5 +1,6 @@
 import urllib.parse
-from .static import Metadata
+from .metadata import Metadata
+
 
 def get_url(app_url: str, id: str, metadata: Metadata) -> str:
     metadata_dict = metadata.to_dict()

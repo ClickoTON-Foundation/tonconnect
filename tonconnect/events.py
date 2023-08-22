@@ -6,6 +6,7 @@ import tonsdk.utils
 import nacl.signing
 import nacl.public
 
+
 @dataclass
 class Address:
     raw_address: str
