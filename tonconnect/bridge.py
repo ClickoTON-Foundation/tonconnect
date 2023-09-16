@@ -2,7 +2,7 @@ import base64
 import json
 from .crypto import SessionCrypto
 from .utils import public_key_from_hex, public_key_to_hex
-from .events import ConnectEvent
+from .events import Event, ConnectEvent, ConnectErrorEvent
 from .requests import Request
 from .exceptions import BridgeException
 from .httpbridge import Client
@@ -17,20 +17,21 @@ class Bridge():
         self.ttl = ttl
         self.timeout = timeout
     
-    async def next_id(self):
+    async def next_id(self) -> int:
         if self.last_rpc_id is None:
             self.last_rpc_id = 0
         else:
             self.last_rpc_id += 1
+
         return self.last_rpc_id
     
-    async def connect(self, session: SessionCrypto = None):
+    async def connect(self, session: SessionCrypto = None) -> None:
         if session is None:
             session = SessionCrypto()
         
         self.session = session
     
-    async def get_events_url(self):
+    async def get_events_url(self) -> str:
         if self.session is None:
             raise BridgeException('Getting event on non-connected bridge.')
 
@@ -40,7 +41,7 @@ class Bridge():
             
         return url
     
-    async def encode_event(self, data, id):
+    async def encode_event(self, data, id) -> Event:
         encoded = base64.b64decode(data['message'])
         nonce = encoded[:24]
         message = encoded[24:]
@@ -50,8 +51,11 @@ class Bridge():
         
         self.last_id = int(id)
         data['id'] = int(id)
+
         if data['event'] == 'connect':
             data = ConnectEvent.from_dict(data)
+        elif data['event'] == 'connect_error':
+            data = ConnectErrorEvent.from_dict(data)
         
         return data
 
@@ -68,7 +72,7 @@ class Bridge():
         
         return url, body
     
-    async def get_event(self):
+    async def get_event(self) -> Event:
         url = await self.get_events_url()
         
         client = Client(url)
@@ -76,7 +80,7 @@ class Bridge():
         
         return await self.encode_event(data, id)
     
-    async def send_request(self, message: Request) -> dict:
+    async def send_request(self, message: Request) -> Event:
         # WIP
         
         url, body = await self.form_request(message)
@@ -86,3 +90,4 @@ class Bridge():
         print(await answer.text(), 'sended')
         
         return await self.get_event()
+

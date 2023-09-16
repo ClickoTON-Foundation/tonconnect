@@ -2,7 +2,7 @@
 name = "tonconnect"
 description = "TON Connect - Python library for using TON Connect 2."
 readme = "README.md"
-version = "0.2.0"
+version = "0.2.1"
 authors = [
     {name = "Vlad100"}
 ]
@@ -14,8 +14,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/ClickoTON-Foundation/tonconnect"
-Documentation = "https://github.com/ClickoTON-Foundation/tonconnect"
+Homepage = "https://github.com/ClickoTON-Foundation/tonconnect/"
+Documentation = "https://github.com/ClickoTON-Foundation/tonconnect/"
 Repository = "https://github.com/ClickoTON-Foundation/tonconnect/"
 
 [build-system]

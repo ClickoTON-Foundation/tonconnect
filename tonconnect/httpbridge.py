@@ -17,8 +17,7 @@ class Client():
             })).content
             
             start = time.time()
-            run = True
-            while run:
+            while True:
                 line: bytes = await response.readline()
                     
                 if time.time() - start >= timeout:
@@ -26,14 +25,12 @@ class Client():
                 
                 line = line.decode('UTF-8')
                 if line == '\r\n':
-                    run = False
                     break
                 if ':' in line and not line.startswith(':'):
                     key, value = line.split(':', 1)
                     value = value.strip()
                     if key == 'data':
                         data = json.loads(value)
-                        run = False
                         break
                     elif key == 'id':
                         try:
@@ -46,3 +43,4 @@ class Client():
     async def send(self, body):
         async with aiohttp.ClientSession() as client:
             return await client.post('https://' + self.url, json=body)
+

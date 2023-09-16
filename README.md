@@ -86,6 +86,9 @@ More examples can be found in examples folder.
 
 ## Version History
 
+* 0.2.1
+    * Added ConnectErrorEvent
+    * Minor changes
 * 0.2.0
     * Added support of custom timeout
     * Added tonhub support

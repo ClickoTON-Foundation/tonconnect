@@ -7,23 +7,30 @@ import nacl.signing
 import nacl.public
 
 
+class Event():
+    def __init__(self, id: int) -> None:
+        self.id = id
+
+
+
 @dataclass
 class Address:
     raw_address: str
     address: str
     state_init: bytes
     
+    @staticmethod
     def from_dict(data: dict):
         return Address(data['address'], tonsdk.utils.Address(data['address']).to_string(True, True, True, False), base64.b64decode(data['walletStateInit']))
 
-    def get_key(self):
+    def get_key(self) -> bytes:
         state = self.state_init
         state = state[:-5]
         state = state[-32:]
         
         return state
     
-    def get_verify_key(self):
+    def get_verify_key(self) -> nacl.signing.VerifyKey:
         return nacl.signing.VerifyKey(self.get_key())
 
 
@@ -35,14 +42,18 @@ class AddressProof:
     payload: str
     signature: bytes
     
+    @staticmethod
     def from_dict(data: dict):
         data = data['proof']
         
         signature = base64.b64decode(data['signature'])
-        return AddressProof(data['timestamp'], data['domain']['lengthBytes'], data['domain']['value'], data['payload'], signature)
+        return AddressProof(data['timestamp'], data['domain']['lengthBytes'], 
+                            data['domain']['value'], data['payload'], signature)
     
     def construct_message(self, address: str) -> bytes:
-        address_data = tonsdk.utils._address.parse_friendly_address(tonsdk.utils.Address(address).to_string(True))
+        address_data = tonsdk.utils._address.parse_friendly_address(
+            tonsdk.utils.Address(address).to_string(True)
+        )
         address_hash = address_data['hash_part']
         
         wc = c_int32(address_data['workchain'])
@@ -70,7 +81,7 @@ class AddressProof:
         
         return full_message
     
-    def check(self, address: str, public_key: nacl.signing.VerifyKey):
+    def check(self, address: str, public_key: nacl.signing.VerifyKey) -> bool:
         message = self.construct_message(address)
         
         try:
@@ -86,22 +97,28 @@ class Device:
     app: str
     version: str
     
+    @staticmethod
     def from_dict(data: dict):
         return Device(data['platform'], data['appName'], data['appVersion'])
 
-class ConnectEvent():
-    def __init__(self, id: int, address: Address, proof: AddressProof, device: Device):
-        self.id = id
+
+class ConnectEvent(Event):
+    def __init__(self, id: int, address: Address, 
+                 proof: AddressProof, device: Device) -> None:
+        super().__init__(id)
+
         self.address: Address = address
         self.proof: AddressProof = proof
         self.device: Device = device
     
+    @staticmethod
     def from_dict(data: dict):
         payload = data['payload']
         
         address = None
         proof = None
         device = None
+
         for item in payload['items']:
             if item['name'] == 'ton_addr':
                 address = Address.from_dict(item)
@@ -109,4 +126,23 @@ class ConnectEvent():
                 proof = AddressProof.from_dict(item)
         device = Device.from_dict(payload['device'])
         
+
         return ConnectEvent(int(data['id']), address, proof, device)
+
+
+class ConnectErrorEvent(Event):
+    def __init__(self, id: int, message: str, code: int) -> None:
+        super().__init__(id)
+        self.message = message
+        self.code = code
+
+    @staticmethod
+    def from_dict(data: dict):
+        payload = data['payload']
+
+        message = payload['message']
+        code = int(payload['code'])
+
+        return ConnectErrorEvent(int(data['id']), message, code)
+
+
