@@ -1,4 +1,6 @@
 # TON Connect for Python
+[![PyPI version](https://img.shields.io/pypi/v/tonconnect)](https://pypi.org/project/tonconnect)
+[![Downloads](https://static.pepy.tech/badge/tonconnect)](https://pypi.org/project/tonconnect)
 
 Library for connecting TON Connect to Python apps.
 
